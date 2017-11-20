@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="./css/index.css">
+  <title>Neighbourhood Map Project | Udacity</title>
+</head>
+
+<body>
+  <div class="container">
+    <aside>
+      <h1>Best Coffee Shops</h1>
+      <form>
+        <input type="text" data-bind="value: searchQuery, valueUpdate: 'keyup'" placeholder="Search">
+      </form>
+      <h3 data-bind="if: isLoading">
+        Loading Shops...
+      </h3>
+      <h3 data-bind="if: error">
+        <span data-bind="text: error"></span>
+      </h3>
+      <ul data-bind="foreach: filteredShops">
+        <li>
+          <a data-bind="text:shopName, click: $parent.selectedShop, css: {clickedShop: $data == $root.clickedShop() }"></a>
+        </li>
+      </ul>
+    </aside>
+    <main>
+      <div id="map"></div>
+      <footer>
+        <p>
+          <a href="https://foursquare.com" class="attribution">Powered by
+            <img class="foursquare-logo" src="./images/foursquare-logo-icon-14.png" alt="Foursquare logo">Foursquare</a>
+        </p>
+      </footer>
+    </main>
+  </div>
+  <script src="./lib/knockout.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="./js/index.js"></script>
+  <script async defer onerror="onMapError()" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1GNATGA9CC_wNQvUPuXdB9CjoXBmL-ms&callback=initializeMap"></script>
+</body>
+
+</html>
