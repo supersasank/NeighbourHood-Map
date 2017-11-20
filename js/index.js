@@ -11,7 +11,7 @@ function getCoffeeShops() {
   $.get(
     `https://api.foursquare.com/v2/venues/search?client_id=${clientId}&client_secret=${clientSecret}&v=20170801&near=hyderabad&query=coffee&limit=20`
   )
-    .then(function(data) {
+    .then(function (data) {
       var promises = data.response.venues.map(venu => {
         return $.get(
           `https://api.foursquare.com/v2/venues/${venu.id}?client_id=${clientId}&client_secret=${clientSecret}&v=20170801`
@@ -19,7 +19,7 @@ function getCoffeeShops() {
       });
       return Promise.all(promises);
     })
-    .then(function(data) {
+    .then(function (data) {
       vm.isLoading(false);
       coffeeShops = data.map(item => {
         return item.response.venue;
@@ -27,17 +27,17 @@ function getCoffeeShops() {
       console.log(coffeeShops);
       var bounds = new google.maps.LatLngBounds();
       //Responsive map for resize browser window
-      google.maps.event.addDomListener(window, 'resize', function() {
+      google.maps.event.addDomListener(window, 'resize', function () {
         map.fitBounds(bounds);
       });
       coffeeShops.forEach(element => {
         vm.coffeeShops.push(new mapMarker(element));
       });
-      vm.coffeeShops().forEach(function(business) {
+      vm.coffeeShops().forEach(function (business) {
         bounds.extend(business.marker.position);
       });
     })
-    .catch(function(err) {
+    .catch(function (err) {
       vm.isLoading(false);
       vm.error(
         err.message || 'Failed to load shops due to something bad happened with API requests(Check browsers console)'
@@ -60,16 +60,16 @@ function mapMarker(data) {
     map: map,
     animation: google.maps.Animation.DROP,
   });
-  self.reCenterMap = function() {
+  self.reCenterMap = function () {
     map.panTo(new google.maps.LatLng(self.lat, self.lng));
   };
-  self.bounceMarker = function() {
+  self.bounceMarker = function () {
     self.marker.setAnimation(google.maps.Animation.BOUNCE);
-    setTimeout(function() {
+    setTimeout(function () {
       self.marker.setAnimation(null);
     }, 1500);
   };
-  self.openInfoWindow = function() {
+  self.openInfoWindow = function () {
     self.reCenterMap();
     infoWindow.open(map, self.marker);
     infoWindow.setContent(`
@@ -91,7 +91,7 @@ function mapMarker(data) {
       </div>
     `);
   };
-  self.switchInfoWindow = function() {
+  self.switchInfoWindow = function () {
     if (currentInfoWindow) {
       currentInfoWindow.close();
     }
@@ -99,22 +99,22 @@ function mapMarker(data) {
     currentMarker = self.marker;
     self.openInfoWindow();
   };
-  self.closeInfoWindowOnMapClick = function() {
-    google.maps.event.addListener(map, 'click', function() {
+  self.closeInfoWindowOnMapClick = function () {
+    google.maps.event.addListener(map, 'click', function () {
       infoWindow.close();
     });
   };
-  self.showMarkerInteraction = function() {
+  self.showMarkerInteraction = function () {
     self.openInfoWindow();
     self.bounceMarker();
     self.switchInfoWindow();
     self.closeInfoWindowOnMapClick();
   };
-  self.marker.addListener('click', function() {
+  self.marker.addListener('click', function () {
     self.showMarkerInteraction();
   });
   self.isMarkerVisible = ko.observable(false);
-  self.isMarkerVisible.subscribe(function(currentState) {
+  self.isMarkerVisible.subscribe(function (currentState) {
     if (currentState) {
       self.marker.setMap(map);
     } else {
@@ -132,8 +132,8 @@ function ViewModel() {
   self.coffeeShops = ko.observableArray([]);
   getCoffeeShops(self.coffeeShops, self.isLoading);
   self.searchQuery = ko.observable('');
-  self.filteredShops = ko.computed(function() {
-    return ko.utils.arrayFilter(self.coffeeShops(), function(shop) {
+  self.filteredShops = ko.computed(function () {
+    return ko.utils.arrayFilter(self.coffeeShops(), function (shop) {
       var matchedShop =
         shop
           .name()
@@ -145,9 +145,9 @@ function ViewModel() {
     });
   });
   self.clickedShop = ko.observable();
-  self.selectedShop = function(click) {
+  self.selectedShop = function (click) {
     self.clickedShop(click);
-    if (click != null) {
+    if (click !== null) {
       self.clickedShop().showMarkerInteraction();
     }
   };
@@ -156,11 +156,11 @@ function ViewModel() {
 var vm = new ViewModel();
 ko.applyBindings(vm);
 
-window.onMapError = function() {
+window.onMapError = function () {
   alert('Google Maps has failed to load. Please check your internet connection and try again.');
 };
 
-window.initializeMap = function() {
+window.initializeMap = function () {
   map = new google.maps.Map(document.querySelector('#map'), {
     zoom: 12,
     center: new google.maps.LatLng({
