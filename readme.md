@@ -18,7 +18,7 @@ This single page application shows a map of Best Coffee Shops in Hyderabad(Inida
 * Google maps and Forsquare errors are handled gracefully.
 
 ## How to View This App
-1. Clone or Download the source code from my repo at GitHub: https://github.com/supersasank/NeighbourHood-Map.git in your browser.
+1. Clone or Download the source code from my repo at GitHub: https://github.com/supersasank/NeighbourHood-Map.git .
 2. Extract the files 
 3. Open index.html
 
